@@ -1,0 +1,117 @@
+FMIL: module = FMILIB, log level = 5: Allocating FMIL context
+FMIL: module = FMILIB, log level = 5: Parsing model description XML
+FMIL: module = FMI2XML, log level = 5: Parsing XML element fmiModelDescription
+FMIL: module = FMI2XML, log level = 5: Parsing XML element CoSimulation
+FMIL: module = FMI2XML, log level = 5: Parsing XML element ModelVariables
+FMIL: module = FMI2XML, log level = 5: Building alias index
+FMIL: module = FMI2XML, log level = 5: Parsing XML element ModelStructure
+FMIL: module = FMI2XML, log level = 5: Parsing XML element Outputs
+FMIL: module = FMILIB, log level = 5: Parsing finished successfully
+FMIL: module = FMILIB, log level = 4: Loading 'win64' binary with 'default' platform types
+FMIL: module = FMICAPI, log level = 5: Loaded FMU binary from C:\Users\Bobby\AppData\Local\Temp\JModelica.org\jm_tmps155_1pn\binaries\win64\GuangZhou_Heat_FMU_FLC_Simplest.dll
+FMIL: module = FMICAPI, log level = 5: Loading functions for the co-simulation interface
+FMIL: module = FMILIB, log level = 5: Successfully loaded all the interface functions
+FMIL: module = Model, log level = 4: [ok][FMU status:OK] fmi2Instantiate: The Resource location of FMU with instance name Model is file:///C:/Users/Bobby/AppData/Local/Temp/JModelica.org/jm_tmps155_1pn/resources.
+
+FMIL: module = Model, log level = 3: [warning][FMU status:Warning] fmi2Instantiate: Argument loggingOn is set to 1
+. This is not supported. loggingOn will default to '0'.
+
+FMIL: module = Model, log level = 4: [ok][FMU status:OK] The current working directory is D:\Onedrive\OneDrive - zju.edu.cn\Sync\Python_Project\RL
+
+FMIL: module = Model, log level = 3: [warning][FMU status:Warning] fmi2Instantiate: The fmuOutput directory D:\Onedrive\OneDrive - zju.edu.cn\Sync\Python_Project\RL\Output_EPExport_Model exists. It will now be deleted.
+
+FMIL: module = Model, log level = 4: [ok][FMU status:OK] This is the output folder D:\Onedrive\OneDrive - zju.edu.cn\Sync\Python_Project\RL\Output_EPExport_Model
+
+FMIL: module = Model, log level = 4: [ok][FMU status:OK] This is the command to be executed to delete existing directory rmdir /S /Q "D:\Onedrive\OneDrive - zju.edu.cn\Sync\Python_Project\RL\Output_EPExport_Model"
+
+FMIL: module = Model, log level = 3: [warning][FMU status:Warning] fmi2Instantiate: The fmuOutput directory D:\Onedrive\OneDrive - zju.edu.cn\Sync\Python_Project\RL\Output_EPExport_Model could not be deleted
+
+FMIL: module = Model, log level = 4: [ok][FMU status:OK] fmi2Instantiate: Path to fmuUnzipLocation is not ///C:/Users/Bobby/AppData/Local/Temp/JModelica.org/jm_tmps155_1pn.
+
+FMIL: module = Model, log level = 4: [ok][FMU status:OK] fmi2Instantiate: Path to fmuUnzipLocation is not //C:/Users/Bobby/AppData/Local/Temp/JModelica.org/jm_tmps155_1pn.
+
+FMIL: module = Model, log level = 4: [ok][FMU status:OK] fmi2Instantiate: Path to fmuUnzipLocation is not /C:/Users/Bobby/AppData/Local/Temp/JModelica.org/jm_tmps155_1pn.
+
+FMIL: module = Model, log level = 4: [ok][FMU status:OK] fmi2Instantiate: Path to fmuUnzipLocation C:/Users/Bobby/AppData/Local/Temp/JModelica.org/jm_tmps155_1pn\
+
+FMIL: module = Model, log level = 4: [ok][FMU status:OK] fmi2Instantiate: Path to fmuResourceLocation C:/Users/Bobby/AppData/Local/Temp/JModelica.org/jm_tmps155_1pn\resources\
+
+FMIL: module = Model, log level = 2: [error][FMU status:Error] fmi2Instantiate: Could not create the output directory D:\Onedrive\OneDrive - zju.edu.cn\Sync\Python_Project\RL\Output_EPExport_Model. Instantiation of Model failed.
+
+FMIL: module = Model, log level = 4: [ok][FMU status:OK] Command executes to copy content of resources folder: xcopy "C:\Users\Bobby\AppData\Local\Temp\JModelica.org\jm_tmps155_1pn\resources\"variables.cfg "D:\Onedrive\OneDrive - zju.edu.cn\Sync\Python_Project\RL\Output_EPExport_Model\" /Y /I
+
+FMIL: module = Model, log level = 4: [ok][FMU status:OK] fmi2Instantiate: Instantiation of Model succeded.
+
+FMIL: module = FMI2XML, log level = 3: fmi2_xml_get_default_experiment_tolerance: returning default value, since no attribute was defined in modelDescription
+FMIL: module = FMICAPI, log level = 5: Calling fmi2SetupExperiment
+FMIL: module = Model, log level = 3: [warning][FMU status:Warning] fmi2SetupExperiment: The StopTimeDefined parameter is set to 0. This is not valid. EnergyPlus FMU requires a stop time and will use the stop time 18403200.000000 which is provided.
+
+FMIL: module = Model, log level = 3: [warning][FMU status:Warning] fmi2SetupExperiment: The toleranceDefined parameter is set to 1. However, EnergyPlus FMU won't use the tolerance 0.000100 which is provided.
+
+FMIL: module = FMICAPI, log level = 5: Calling fmi2EnterInitializationMode
+FMIL: module = Model, log level = 4: [ok][FMU status:OK] fmi2EnterInitializationMode: The sockfd is 1904.
+
+FMIL: module = Model, log level = 4: [ok][FMU status:OK] fmi2EnterInitializationMode: The port number is 13661.
+
+FMIL: module = Model, log level = 4: [ok][FMU status:OK] fmi2EnterInitializationMode: This hostname is Booby-Deskrop.
+
+FMIL: module = Model, log level = 4: [ok][FMU status:OK] fmi2EnterInitializationMode: TCPServer Server waiting for clients on port: 13661.
+
+FMIL: module = Model, log level = 4: [ok][FMU status:OK] fmi2EnterInitializationMode: The number of input variables is 4.
+
+FMIL: module = Model, log level = 4: [ok][FMU status:OK] fmi2EnterInitializationMode: The number of output variables is 20.
+
+FMIL: module = Model, log level = 4: [ok][FMU status:OK] Get input file from resource folder C:\Users\Bobby\AppData\Local\Temp\JModelica.org\jm_tmps155_1pn\resources\.
+
+FMIL: module = Model, log level = 4: [ok][FMU status:OK] Searching for following pattern .idf
+
+FMIL: module = Model, log level = 4: [ok][FMU status:OK] Read directory and search for *.idf, *.epw, or *.idd file.
+
+FMIL: module = Model, log level = 4: [ok][FMU status:OK] Read directory and search for *.idf, *.epw, or *.idd file.
+
+FMIL: module = Model, log level = 4: [ok][FMU status:OK] Read directory and search for *.idf, *.epw, or *.idd file.
+
+FMIL: module = Model, log level = 4: [ok][FMU status:OK] Read directory and search for *.idf, *.epw, or *.idd file.
+
+FMIL: module = Model, log level = 4: [ok][FMU status:OK] Read directory and search for *.idf, *.epw, or *.idd file.
+
+FMIL: module = Model, log level = 4: [ok][FMU status:OK] Found matching file GuangZhou_Heat_FMU_FLC_Simplest.idf.
+
+FMIL: module = Model, log level = 4: [ok][FMU status:OK] done searching pattern .idf
+
+FMIL: module = Model, log level = 4: [ok][FMU status:OK] Get input file from resource folder C:\Users\Bobby\AppData\Local\Temp\JModelica.org\jm_tmps155_1pn\resources\.
+
+FMIL: module = Model, log level = 4: [ok][FMU status:OK] Searching for following pattern .epw
+
+FMIL: module = Model, log level = 4: [ok][FMU status:OK] Read directory and search for *.idf, *.epw, or *.idd file.
+
+FMIL: module = Model, log level = 4: [ok][FMU status:OK] Read directory and search for *.idf, *.epw, or *.idd file.
+
+FMIL: module = Model, log level = 4: [ok][FMU status:OK] Read directory and search for *.idf, *.epw, or *.idd file.
+
+FMIL: module = Model, log level = 4: [ok][FMU status:OK] Found matching file CHN_Guangdong.Guangzhou.592870_CSWDEPW.epw.
+
+FMIL: module = Model, log level = 4: [ok][FMU status:OK] done searching pattern .epw
+
+FMIL: module = Model, log level = 4: [ok][FMU status:OK] Get input file from resource folder C:\Users\Bobby\AppData\Local\Temp\JModelica.org\jm_tmps155_1pn\resources\.
+
+FMIL: module = Model, log level = 4: [ok][FMU status:OK] Searching for following pattern .idd
+
+FMIL: module = Model, log level = 4: [ok][FMU status:OK] Read directory and search for *.idf, *.epw, or *.idd file.
+
+FMIL: module = Model, log level = 4: [ok][FMU status:OK] Read directory and search for *.idf, *.epw, or *.idd file.
+
+FMIL: module = Model, log level = 4: [ok][FMU status:OK] Read directory and search for *.idf, *.epw, or *.idd file.
+
+FMIL: module = Model, log level = 4: [ok][FMU status:OK] Read directory and search for *.idf, *.epw, or *.idd file.
+
+FMIL: module = Model, log level = 4: [ok][FMU status:OK] Found matching file Energy+.idd.
+
+FMIL: module = Model, log level = 4: [ok][FMU status:OK] done searching pattern .idd
+
+FMIL: module = Model, log level = 4: [ok][FMU status:OK] This version uses the **energyplus** command line interface to  call the EnergyPlus executable. **RunEPlus.bat** and **runenergyplus** , which were used in earlier versions, were deprecated as of August 2015.
+FMIL: module = Model, log level = 4: [ok][FMU status:OK] fmi2EnterInitializationMode: The connection has been accepted.
+
+FMIL: module = Model, log level = 4: [ok][FMU status:OK] fmi2EnterInitializationMode: Slave Model is initialized.
+
+FMIL: module = FMICAPI, log level = 5: Calling fmi2ExitInitializationMode

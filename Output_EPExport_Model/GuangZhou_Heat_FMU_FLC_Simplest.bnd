@@ -1,0 +1,117 @@
+Program Version,EnergyPlus, Version 9.4.0-998c4b761e, YMD=2024.03.09 22:54
+! This file shows details about the branches, nodes, and other
+! elements of the flow connections.
+! This file is intended for use in "debugging" potential problems
+! that may also be detected by the program, but may be more easily
+! identified by "eye".
+! This file is also intended to support software which draws a
+! schematic diagram of the HVAC system.
+! ===============================================================
+! #Nodes,<Number of Unique Nodes>
+ #Nodes,12
+! <Node>,<NodeNumber>,<Node Name>,<Node Fluid Type>,<# Times Node Referenced After Definition>
+ Node,1,PARLOR ZONE AIR NODE,Air,0
+ Node,2,PARLOR SUPPLY INLET,Air,1
+ Node,3,PARLOR RETURN OUTLET,Air,0
+ Node,4,MASTER ZONE AIR NODE,Air,0
+ Node,5,MASTER SUPPLY INLET,Air,1
+ Node,6,MASTER RETURN OUTLET,Air,0
+ Node,7,SECONDARY 1  ZONE AIR NODE,Air,0
+ Node,8,SECONDARY 1 SUPPLY INLET,Air,1
+ Node,9,SECONDARY 1 RETURN OUTLET,Air,0
+ Node,10,SECONDARY 2  ZONE AIR NODE,Air,0
+ Node,11,SECONDARY 2 SUPPLY INLET,Air,1
+ Node,12,SECONDARY 2 RETURN OUTLET,Air,0
+! ===============================================================
+! Suspicious nodes have 0 references.  It is normal for some nodes, however.
+! Listing nodes with 0 references (culled from previous list):
+! <Suspicious Node>,<NodeNumber>,<Node Name>,<Node Fluid Type>,<# Times Node Referenced After Definition>
+ Suspicious Node,1,PARLOR ZONE AIR NODE,Air,0
+ Suspicious Node,3,PARLOR RETURN OUTLET,Air,0
+ Suspicious Node,4,MASTER ZONE AIR NODE,Air,0
+ Suspicious Node,6,MASTER RETURN OUTLET,Air,0
+ Suspicious Node,7,SECONDARY 1  ZONE AIR NODE,Air,0
+ Suspicious Node,9,SECONDARY 1 RETURN OUTLET,Air,0
+ Suspicious Node,10,SECONDARY 2  ZONE AIR NODE,Air,0
+ Suspicious Node,12,SECONDARY 2 RETURN OUTLET,Air,0
+! ===============================================================
+! <#Branch Lists>,<Number of Branch Lists>
+ #Branch Lists,0
+! <Branch List>,<Branch List Count>,<Branch List Name>,<Loop Name>,<Loop Type>,<Number of Branches>
+! <Branch>,<Branch Count>,<Branch Name>,<Loop Name>,<Loop Type>,<Branch Inlet Node Name>,<Branch Outlet Node Name>
+! ===============================================================
+! <#Supply Air Paths>,<Number of Supply Air Paths>
+ #Supply Air Paths,0
+! <Supply Air Path>,<Supply Air Path Count>,<Supply Air Path Name>,<AirLoopHVAC Name>
+! <#Components on Supply Air Path>,<Number of Components>
+! <Supply Air Path Component>,<Component Count>,<Component Type>,<Component Name>,<AirLoopHVAC Name>
+! <#Outlet Nodes on Supply Air Path Component>,<Number of Nodes>
+! <Supply Air Path Component Nodes>,<Node Count>,<Component Type>,<Component Name>,<Inlet Node Name>,<Outlet Node Name>,<AirLoopHVAC Name>
+! ===============================================================
+! <#Return Air Paths>,<Number of Return Air Paths>
+ #Return Air Paths,0
+! <Return Air Path>,<Return Air Path Count>,<Return Air Path Name>,<AirLoopHVAC Name>
+! <#Components on Return Air Path>,<Number of Components>
+! <Return Air Path Component>,<Component Count>,<Component Type>,<Component Name>,<AirLoopHVAC Name>
+! <#Inlet Nodes on Return Air Path Component>,<Number of Nodes>
+! <Return Air Path Component Nodes>,<Node Count>,<Component Type>,<Component Name>,<Inlet Node Name>,<Outlet Node Name>,<AirLoopHVAC Name>
+! ===============================================================
+! #Outdoor Air Nodes,<Number of Outdoor Air Nodes>
+ #Outdoor Air Nodes,0
+! ===============================================================
+! <#Component Sets>,<Number of Component Sets>
+ #Component Sets,0
+! <Component Set>,<Component Set Count>,<Parent Object Type>,<Parent Object Name>,<Component Type>,<Component Name>,<Inlet Node ID>,<Outlet Node ID>,<Description>
+! ===============================================================
+! <# Plant Loops>,<Number of Plant Loops>
+ #Plant Loops,0
+! <Plant Loop>,<Plant Loop Name>,<Loop Type>,<Inlet Node Name>,<Outlet Node Name>,<Branch List>,<Connector List>
+! <Plant Loop Connector>,<Connector Type>,<Connector Name>,<Loop Name>,<Loop Type>,<Number of Inlets/Outlets>
+! <Plant Loop Connector Branches>,<Connector Node Count>,<Connector Type>,<Connector Name>,<Inlet Branch>,<Outlet Branch>,<Loop Name>,<Loop Type>
+! <Plant Loop Connector Nodes>,<Connector Node Count>,<Connector Type>,<Connector Name>,<Inlet Node>,<Outlet Node>,<Loop Name>,<Loop Type>
+! <Plant Loop Supply Connection>,<Plant Loop Name>,<Supply Side Outlet Node Name>,<Demand Side Inlet Node Name>
+! <Plant Loop Return Connection>,<Plant Loop Name>,<Demand Side Outlet Node Name>,<Supply Side Inlet Node Name>
+! ===============================================================
+! <# Condenser Loops>,<Number of Condenser Loops>
+ #Condenser Loops,0
+! <Condenser Loop>,<Condenser Loop Name>,<Loop Type>,<Inlet Node Name>,<Outlet Node Name>,<Branch List>,<Connector List>
+! <Condenser Loop Connector>,<Connector Type>,<Connector Name>,<Loop Name>,<Loop Type>,<Number of Inlets/Outlets>
+! <Condenser Loop Connector Branches>,<Connector Node Count>,<Connector Type>,<Connector Name>,<Inlet Branch>,<Outlet Branch>,<Loop Name>,<Loop Type>
+! <Condenser Loop Connector Nodes>,<Connector Node Count>,<Connector Type>,<Connector Name>,<Inlet Node>,<Outlet Node>,<Loop Name>,<Loop Type>
+! <Condenser Loop Supply Connection>,<Condenser Loop Name>,<Supply Side Outlet Node Name>,<Demand Side Inlet Node Name>
+! <Condenser Loop Return Connection>,<Condenser Loop Name>,<Demand Side Outlet Node Name>,<Supply Side Inlet Node Name>
+! ===============================================================
+! <# Controlled Zones>,<Number of Controlled Zones>
+ #Controlled Zones,4
+! <Controlled Zone>,<Controlled Zone Name>,<Equip List Name>,<Control List Name>,<Zone Node Name>,<# Inlet Nodes>,<# Exhaust Nodes>,<# Return Nodes>
+! <Controlled Zone Inlet>,<Inlet Node Count>,<Controlled Zone Name>,<Supply Air Inlet Node Name>,<SD Sys:Cooling/Heating [DD:Cooling] Inlet Node Name>,<DD Sys:Heating Inlet Node Name>
+! <Controlled Zone Exhaust>,<Exhaust Node Count>,<Controlled Zone Name>,<Exhaust Air Node Name>
+ Controlled Zone,MASTER,MASTER --EQUIP,,MASTER ZONE AIR NODE,1,0,1
+   Controlled Zone Inlet,1,MASTER,MASTER SUPPLY INLET,Undefined,N/A
+   Controlled Zone Return,1,MASTER,MASTER RETURN OUTLET
+ Controlled Zone,PARLOR,PARLOR--EQUIP,,PARLOR ZONE AIR NODE,1,0,1
+   Controlled Zone Inlet,1,PARLOR,PARLOR SUPPLY INLET,Undefined,N/A
+   Controlled Zone Return,1,PARLOR,PARLOR RETURN OUTLET
+ Controlled Zone,SECONDARY 1,SECONDARY 1--EQUIP,,SECONDARY 1  ZONE AIR NODE,1,0,1
+   Controlled Zone Inlet,1,SECONDARY 1,SECONDARY 1 SUPPLY INLET,Undefined,N/A
+   Controlled Zone Return,1,SECONDARY 1,SECONDARY 1 RETURN OUTLET
+ Controlled Zone,SECONDARY 2,SECONDARY 2--EQUIP,,SECONDARY 2  ZONE AIR NODE,1,0,1
+   Controlled Zone Inlet,1,SECONDARY 2,SECONDARY 2 SUPPLY INLET,Undefined,N/A
+   Controlled Zone Return,1,SECONDARY 2,SECONDARY 2 RETURN OUTLET
+! ===============================================================
+! <#Zone Equipment Lists>,<Number of Zone Equipment Lists>
+ #Zone Equipment Lists,4
+! <Zone Equipment List>,<Zone Equipment List Count>,<Zone Equipment List Name>,<Zone Name>,<Number of Components>
+! <Zone Equipment Component>,<Component Count>,<Component Type>,<Component Name>,<Zone Name>,<Heating Priority>,<Cooling Priority>
+ Zone Equipment List,3,MASTER --EQUIP,MASTER,1
+   Zone Equipment Component,1,ZONEHVAC:IDEALLOADSAIRSYSTEM,MASTER--ZONEHVAC:IDEALLOADSAIRSYSTEM,MASTER,1,1
+ Zone Equipment List,4,PARLOR--EQUIP,PARLOR,1
+   Zone Equipment Component,1,ZONEHVAC:IDEALLOADSAIRSYSTEM,PARLOR--ZONEHVAC:IDEALLOADSAIRSYSTEM,PARLOR,1,1
+ Zone Equipment List,5,SECONDARY 1--EQUIP,SECONDARY 1,1
+   Zone Equipment Component,1,ZONEHVAC:IDEALLOADSAIRSYSTEM,SECONDARY 1--ZONEHVAC:IDEALLOADSAIRSYSTEM,SECONDARY 1,1,1
+ Zone Equipment List,6,SECONDARY 2--EQUIP,SECONDARY 2,1
+   Zone Equipment Component,1,ZONEHVAC:IDEALLOADSAIRSYSTEM,SECONDARY 2--ZONEHVAC:IDEALLOADSAIRSYSTEM,SECONDARY 2,1,1
+! ===============================================================
+! <#AirLoopHVACs>,<Number of AirLoopHVACs>
+ #AirLoopHVACs,0
+! <AirLoopHVAC>,<Air Loop Name>,<# Return Nodes>,<# Supply Nodes>,<# Zones Cooled>,<# Zones Heated>,<Outdoor Air Us
