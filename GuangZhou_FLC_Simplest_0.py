@@ -16,6 +16,7 @@ Created on Mon Jun 26 15:49:52 2023
 # 程序目的：获取一天数据，从6月开始
 
 
+
 from pyfmi import load_fmu
 import numpy as np
 import matplotlib.pyplot as plt
@@ -23,7 +24,6 @@ from control import cont        # 这里要换成强化学习控制
 from conditioner import cond
 from t_RH_ts import t_RH_ts
 from Supply_calculation import supply
-from Excel_Export import Excel_Export
 
 # %%
 '''
@@ -92,15 +92,6 @@ to_HR_supply = np.zeros((step_num, 1))  # 送风含湿量
 to_m_supply = np.zeros((step_num, 1))   # 送风质量流量
 Switch = np.zeros((step_num, 1))        # 空调开关
 
-## 获取的验证数据
-get_Qs_zone = np.zeros((step_num, 1))
-get_Ql_zone = np.zeros((step_num, 1))
-get_Qt_zone = np.zeros((step_num, 1))
-get_Qs_supplyair = np.zeros((step_num, 1))
-get_Ql_supplyair = np.zeros((step_num, 1))
-get_Qt_supplyair = np.zeros((step_num, 1))
-
-
 # %%
 '''
 4 设置空调送风参数和空调开关，模拟一个步长
@@ -136,13 +127,7 @@ get_HR[index] = model.get('HR')             # 获取室内含湿量 Humidity Rat
 # 获取室外温度（压缩机功率需要用到）
 get_T_out[index] = model.get('T_out')       # 获取室外温度
 
-# 获取验证数据
-get_Qs_zone[index] = model.get('Qs_1')
-get_Ql_zone[index] = model.get('Ql_1')
-get_Qt_zone[index] = model.get('Qt_1')
-get_Qs_supplyair[index] = model.get('Qs')
-get_Ql_supplyair[index] = model.get('Ql')
-get_Qt_supplyair[index] = model.get('Qt')
+
 # %%
 '''
 6 利用运行一个时间步长的参数来计算下一时刻送风参数 （这里用到控制算法）
@@ -194,16 +179,9 @@ while sim_start < sim_stop:
     get_RH[index] = model.get('RH')     # 获取室内湿度
     get_HR[index] = model.get('HR')     # 获取室内含湿量
     get_T_out[index] = model.get('T_out')       # 获取室外温度
-    get_HR_out[index] = model.get('HR_out')     # 获取室外湿度
-    get_m_out[index] = model.get('m_out')       # 获取室外风量
+    get_HR_out[index] = model.get('HR_out')     # 获取室外湿度  OA：outdoor air
+    get_m_out[index] = model.get('m_out')       # 获取室外风量 kg/s (这个是干嘛的)
 
-    # 获取验证数据
-    get_Qs_zone[index] = model.get('Qs_1')
-    get_Ql_zone[index] = model.get('Ql_1')
-    get_Qt_zone[index] = model.get('Qt_1')
-    get_Qs_supplyair[index] = model.get('Qs')
-    get_Ql_supplyair[index] = model.get('Ql')
-    get_Qt_supplyair[index] = model.get('Qt')
 
     # 根据获取数据进行计算
     delta_T[index] = get_T[index] - 25  # 计算温度误差
@@ -227,21 +205,10 @@ while sim_start < sim_stop:
 
 
 
-#%%
+# %%
 '''
 7 画图 
 '''
 plt.plot(step, get_T, label='T')
 plt.plot(step, get_RH, label='RH')
 plt.show()
-
-#%%
-'''
-8 把验证数据等导入到excel表
-'''
-# 创建需要导出到Excel的参数字典
-dic = {'get_Qs_zone': get_Qs_zone[:,0], 'get_Qs_supplyair': get_Qs_supplyair[:,0], } # [:,0]的意思是取第一列的所有行，把二维ndarray变成一维array，字典不能把键值对中的值value设成二维
-# 调用Excel_Export.py文件中的To_Excel函数，把数据导出到a.xlsx的excel文件中
-file_name = 'a.xlsx'                                          # file_name只有文件名就是在project里面生成excel
-# file_name = r"C:\Users\Bobby\Desktop\a.xlsx"                # 也可以放置到桌面上，必须要加r，选用a的原因是a.xlsx可以在project的最上面
-Excel_Export(dic,file_name)
