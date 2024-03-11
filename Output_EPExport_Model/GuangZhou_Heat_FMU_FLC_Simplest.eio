@@ -1,4 +1,4 @@
-Program Version,EnergyPlus, Version 9.4.0-998c4b761e, YMD=2024.03.09 22:54
+Program Version,EnergyPlus, Version 9.4.0-998c4b761e, YMD=2024.03.11 20:52
 ! <Version>, Version ID
  Version, 9.4
 ! <Timesteps per Hour>, #TimeSteps, Minutes per TimeStep {minutes}
@@ -140,6 +140,6 @@ Environment,RUNPERIOD,WeatherFileRunPeriod,08/01/2011,08/01/2011,Monday,1,Use Ru
 Environment:Daylight Saving,Yes,InputFile,03/13,11/06
 Environment:Special Days,NEW YEARS DAY,Holiday,InputFile,01/01,  1Environment:Special Days,VETERANS DAY,Holiday,InputFile,11/11,  1Environment:Special Days,CHRISTMAS,Holiday,InputFile,12/25,  1Environment:Special Days,INDEPENDENCE DAY,Holiday,InputFile,07/04,  1Environment:Special Days,MLK DAY,Holiday,InputFile,01/17,  1Environment:Special Days,PRESIDENTS DAY,Holiday,InputFile,02/21,  1Environment:Special Days,MEMORIAL DAY,Holiday,InputFile,05/30,  1Environment:Special Days,LABOR DAY,Holiday,InputFile,09/05,  1Environment:Special Days,COLUMBUS DAY,Holiday,InputFile,10/10,  1Environment:Special Days,THANKSGIVING,Holiday,InputFile,11/24,  1Environment:WarmupDays,  4
 ! <Warmup Convergence Information>,Zone Name,Environment Type/Name,Average Warmup Temperature Difference {deltaC},Std Dev Warmup Temperature Difference {deltaC},Max Temperature Pass/Fail Convergence,Min Temperature Pass/Fail Convergence,Average Warmup Load Difference {W},Std Dev Warmup Load Difference {W},Heating Load Pass/Fail Convergence,Cooling Load Pass/Fail Convergence
- Warmup Convergence Information,CORRIDOR,RunPeriod: RUNPERIOD,8.6888556209E-003,7.0872665612E-003,Pass,Pass,0.0000000000,0.0000000000,Pass,Pass
- Warmup Convergence Information,KITCHEN,RunPeriod: RUNPERIOD,2.7875474109E-002,2.7552006939E-002,Pass,Pass,0.0000000000,0.0000000000,Pass,Pass
+ Warmup Convergence Information,CORRIDOR,RunPeriod: RUNPERIOD,8.7230380900E-003,6.6047048783E-003,Pass,Pass,0.0000000000,0.0000000000,Pass,Pass
+ Warmup Convergence Information,KITCHEN,RunPeriod: RUNPERIOD,2.7964685720E-002,2.6112287929E-002,Pass,Pass,0.0000000000,0.0000000000,Pass,Pass
  Warmup Convergence Information,MASTER,Ru

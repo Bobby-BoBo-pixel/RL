@@ -5,7 +5,7 @@ Created on Tue Feb 14 10:43:55 2023
 @author: Administrator
 """
 
-
+#%%
 
 import numpy as np
 import math
@@ -24,8 +24,10 @@ def cond(Td,Tw,C,F):
     bh_o=np.mat([[-0.533521993],[0.310591457]])
     input_max=np.mat([26.1107843400000,21.9510486800000,80,70])
     input_min=np.mat([21.9798694600000,16.8725499700000,30,30])
-    output_max=np.mat([5366.51813600000,3951.44064000000])
-    output_min=np.mat([1609.92458500000,0])
+    # output_max=np.mat([5366.51813600000,3951.44064000000])
+    output_max=np.mat([2700,2000])
+    # output_min=np.mat([1609.92458500000,0])
+    output_min=np.mat([800,0])
     a1=np.mat([[Td,Tw,C,F]])-input_min
     a2=input_max-input_min
     a3=np.divide(a1,a2)
@@ -51,5 +53,5 @@ def cond(Td,Tw,C,F):
         CCs=0
         CC1=0
     return CCs,CC1 # 这里因为空调冷量太大，需要改小
-a1=cond(25,19,62,582)
+a1=cond(26,17.1,60,50)
 print(a1)

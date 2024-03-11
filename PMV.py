@@ -24,7 +24,7 @@ from math import sqrt
     returns: PMV和PPD组合成的tuple：(pmv, ppd)
     '''
 
-def PMV(ta, rh):
+def get_PMV(ta, rh):
     '''
     此程序根据室内温湿度用于计算PMV，是ANSI/ASHRAE 55-2023: Thermal Environmental Conditions for Human官方文档中的标准指定程序
     :param ta: 室内干球温度

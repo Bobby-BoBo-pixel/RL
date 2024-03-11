@@ -8,6 +8,7 @@
 import torch
 import torch.nn as nn
 from torchviz import make_dot
+
 class Actor(nn.Module):
     def __init__(self, input_size, output_size):
         super().__init__()

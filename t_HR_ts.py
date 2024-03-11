@@ -5,7 +5,7 @@ Created on Thu Feb 23 10:22:01 2023
 @author: Administrator
 """
 import ts_d
-def t_d_ts(t,d):
+def t_HR_ts(t,d):
     '''
     干球温度+含湿量 ---> 湿球温度
     :param t:干球温度

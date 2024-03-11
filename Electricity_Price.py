@@ -5,7 +5,7 @@
 # @Software: PyCharm
 # @Targets :
 
-def scheme(t):
+def get_electricity_price(t):
     if t >= 7 and t < 8:
         price = 0.3784
     if t >=8 and t<11:

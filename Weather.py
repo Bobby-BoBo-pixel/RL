@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 
-def weather():
+def get_weather():
     '''
     不需要参数传递
     :return: T_spline, RH_spline, Solar_spline插值后的数据，size = [num,1]

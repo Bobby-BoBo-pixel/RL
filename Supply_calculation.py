@@ -36,7 +36,7 @@ def supply(get_T, get_HR, cooling):
     # 计算回风显热
     sensible_return = (1.01+1.84*get_HR)*get_T                      # kW
     # 计算送风显热
-    sensible_supply = sensible_return - cooling_sensible            # kW
+    sensible_supply = sensible_return - cooling_sensible/0.3            # kW
     # 计算送风温度
     T_supply = sensible_supply/(1.01+1.84*HR_supply)                # ℃
     return T_supply,HR_supply,m_supply
