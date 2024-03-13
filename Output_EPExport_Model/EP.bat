@@ -1,1 +1,1 @@
-energyplus -w runweafile.epw -p GuangZhou_Heat_FMU_FLC_Simplest -s C -x -m -r GuangZhou_Heat_FMU_FLC_Simplest.idf
+energyplus -w runweafile.epw -p GuangZhou_Heat_FMU_FLC_Simplest_3 -s C -x -m -r GuangZhou_Heat_FMU_FLC_Simplest_3.idf

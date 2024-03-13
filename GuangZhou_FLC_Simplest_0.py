@@ -20,7 +20,7 @@ Created on Mon Jun 26 15:49:52 2023
 from pyfmi import load_fmu
 import numpy as np
 import matplotlib.pyplot as plt
-from control import cont        # 这里要换成强化学习控制
+from Control_FLC import cont        # 这里要换成强化学习控制
 from conditioner import cond
 from t_RH_ts import t_RH_ts
 from Supply_calculation import supply
@@ -53,7 +53,7 @@ step = np.linspace(1, step_num, step_num)
 2 加载模型并初始化
 '''
 # 加载FMU模型
-fmu_name = 'GuangZhou_Heat_FMU_FLC_Simplest.fmu'        # 确定FMU文件名
+fmu_name = 'GuangZhou_Heat_FMU_FLC_Simplest_3.fmu'        # 确定FMU文件名
 model = load_fmu(fmu=fmu_name, log_level=7)             # 加载模型,创建一个model实例，并选择log_level为最高等级，7级，后续程序出问题可以查看生成的日志文件
 # 加载options字典，并给ncp(number of communication points)赋值，否则默认值为500，可以查看下官方文档对option字典各键值对的解释
 opts = model.simulate_options()         # 加载option字典，并赋值给opts
@@ -75,7 +75,7 @@ get_HR = np.zeros((step_num, 1))        # EnergyPlus中室内含湿量
 get_T_out = np.zeros((step_num, 1))     # EnergyPlus中室外温度（用于计算送风温度）
 get_HR_out = np.zeros((step_num, 1))    # EnergyPlus中室外含湿量（用于计算送风温度）
 get_m_out = np.zeros((step_num, 1))     # EnergyPlus中室外风量(用于计算送风温度)
-
+get_Solar_direct = np.zeros((step_num, 1))
 # Python程序计算其他参数所用的参数
 Tw = np.zeros((step_num, 1))            # 中间变量，用于计算冷量，EnergyPlus中获取不了
 delta_T = np.zeros((step_num, 1))       # 温度误差
@@ -126,7 +126,7 @@ get_RH[index] = model.get('RH')             # 获取室内相对湿度
 get_HR[index] = model.get('HR')             # 获取室内含湿量 Humidity Ratio(用于计算送风含湿量)
 # 获取室外温度（压缩机功率需要用到）
 get_T_out[index] = model.get('T_out')       # 获取室外温度
-
+get_Solar_direct[index] = model.get('Solar_direct')
 
 # %%
 '''
@@ -181,7 +181,7 @@ while sim_start < sim_stop:
     get_T_out[index] = model.get('T_out')       # 获取室外温度
     get_HR_out[index] = model.get('HR_out')     # 获取室外湿度  OA：outdoor air
     get_m_out[index] = model.get('m_out')       # 获取室外风量 kg/s (这个是干嘛的)
-
+    get_Solar_direct[index] = model.get('Solar_direct')
 
     # 根据获取数据进行计算
     delta_T[index] = get_T[index] - 25  # 计算温度误差

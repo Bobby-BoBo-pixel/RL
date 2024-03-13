@@ -4,7 +4,10 @@ Created on Mon Jun 26 15:49:52 2023
 
 @author: Administrator
 """
-## 让前7:00前不开空调，21：00后不开空调
+## 让前7:00前不开空调，17：00后不开空调
+## 修改天气文件，7：00前为0， 17：00以后为0
+## 修改idf文件，在非需求响应阶段，为0
+
 
 # 从EnergyPlus传出的变量主要有：T, RH_in
 # 传入EnergyPlus的变量有：T_out, RH_out, Solar_out;  T_send, HR_send, Mass_send

@@ -109,7 +109,7 @@ get_Qt_supplyair = np.zeros((step_num, 1))
 i = 0
 get_T[i] = model.get('T')  # 设置室内初始温度为EnergyPlus里面设置的Tin
 get_RH[i] = model.get('RH')  # 设置室内初始湿度为EnergyPlus里面设置的RH
-T_ini = 27
+T_ini = 25
 RH_ini = 50
 C_ini = 55                                                      # 初始压缩机频率55
 F_ini = 625
@@ -163,7 +163,7 @@ while sim_start < sim_stop:
     '''
     # 计算控制算法和空调模型所需参数
     Tw[i] = t_RH_ts(get_T[i], get_RH[i] / 100)          # 计算湿球温度
-    delta_T[i] = get_T[i] - 25  # 与目标温度误差，设置的目标为25℃
+    delta_T[i] = get_T[i] - 23  # 与目标温度误差，设置的目标为25℃
     delta_RH[i] = get_RH[i] - 50  # 与目标湿度误差，设置的目标为50%
     if i ==0:
         delta_T_c[i] = get_T[i] - T_ini  # 与初始温度误差
@@ -187,66 +187,6 @@ while sim_start < sim_stop:
     # 所有送风参数计算完后再加时间步长
     i += 1
     sim_start += step_time                                  # sim_start这个参数必须要变化，因为do_step进行模拟需要这个参数每次变化一个step_time
-
-# # %%
-# '''
-# 7 计算后续时刻
-# '''
-# # 计算T0之后
-#
-# while sim_start < sim_stop:
-#     # 上一时刻计算的送风参数输入
-#     model.set('ep_HR_supply', to_HR_supply[i-1])
-#     model.set('ep_m_supply', to_m_supply[i-1])
-#     model.set('ep_T_supply', to_T_supply[i-1])
-#     # 根据上一时刻室内温度判断是否开空调
-#     if (get_T[i-1] < 23):
-#         Ava = 0
-#     if (get_T[i-1] >= 23):
-#         Ava = 1
-#     # 向EnergyPlus中传输空调开关信号
-#     Switch[i] = Ava
-#     model.set('ep_switch', Ava)
-#     # 继续进行模拟
-#     model.do_step(current_t=sim_start, step_size=step_time, new_step='True')
-#
-#     # 从EnergyPlus获取数据
-#     get_T[i] = model.get('T')       # 获取室内温度
-#     get_RH[i] = model.get('RH')     # 获取室内湿度
-#     get_HR[i] = model.get('HR')     # 获取室内含湿量
-#     get_T_out[i] = model.get('T_out')       # 获取室外温度
-#     get_HR_out[i] = model.get('HR_out')     # 获取室外湿度
-#     get_m_out[i] = model.get('m_out')       # 获取室外风量
-#
-#     # 获取验证数据
-#     get_Qs_zone[i] = model.get('Qs_1')
-#     get_Ql_zone[i] = model.get('Ql_1')
-#     get_Qt_zone[i] = model.get('Qt_1')
-#     get_Qs_supplyair[i] = model.get('Qs')
-#     get_Ql_supplyair[i] = model.get('Ql')
-#     get_Qt_supplyair[i] = model.get('Qt')
-#
-#     # 根据获取数据进行计算
-#     delta_T[i] = get_T[i] - 25  # 计算温度误差
-#     delta_T_c[i] = get_T[i] - get_T[i-1]  # 计算温度变化率
-#     delta_RH[i] = get_RH[i] - 50  # 计算湿度误差
-#     delta_RH_c[i] = get_RH[i] - get_RH[i-1]  # 计算湿度变化率
-#     speed[i] = cont(float(get_T[i-1, 0]), float(get_T[i, 0]), float(get_RH[i-1, 0]), float(get_RH[i, 0]),
-#                     float(speed[i-1, 0]), float(speed[i-1, 1]))  # 根据算法获取压缩机风机转速
-#     Tw[i] = t_RH_ts(get_T[i], get_RH[i] / 100)  # 计算湿球温度
-#     y1 = 0.766956 + 0.0107756 * Tw[i] - 0.0000414703 * Tw[i] ** 2 + 0.00134961 * get_T_out[i] - 0.000261144 * get_T_out[
-#         i] ** 2 + 0.000457488 * Tw[i] * get_T_out[i]
-#     cooling_load[i] = cond(float(get_T[i]), float(Tw[i]), speed[i, 0], speed[i, 1] / 1250 * 100)  # 计算冷量
-#
-#     # 调用函数计算出送风数据
-#     supply_params = supply(get_T[i], get_HR[i], cooling_load[i])
-#     to_T_supply[i] = supply_params[0]
-#     to_HR_supply[i] = supply_params[1]
-#     to_m_supply[i] = supply_params[2]  # 风量固定0.3kg/s
-#
-#     # 索引参数及sim_star变化
-#     i += 1
-#     sim_start += step_time # 模拟时间增加timestep(因为do_step需要sim_start变化)
 
 
 

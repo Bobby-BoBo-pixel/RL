@@ -9,7 +9,8 @@ Created on Mon Jun 26 15:49:52 2023
 ## delta_Variable系列换成了Variable_c
 ## 加上了神经网络需要的所有参数（都改到了神经网络所需数据里面），并调用神经网络前向传播获取speed
 ## 其中室外天气变化只选用了ep中进行线性插值的（为了先跑出数据）
-
+## 剔除掉了冗余代码
+## get_variable系列统一改成ep_variable
 
 # 从EnergyPlus传出的变量主要有：T, RH_in
 # 传入EnergyPlus的变量有：T_out, RH_out, Solar_out;  T_send, HR_send, Mass_send
@@ -112,108 +113,57 @@ def get_data():
 
     # %%
     '''
-    4 设置空调送风参数和空调开关，模拟一个步长
+    4 设置空调送风参数和空调开关
     '''
     # 设置索引变量
     i = 0
-    # 向EnergyPlus传输初始送风温湿度、质量流量
-    model.set('ep_T_supply', 18.55)         # 设置初始送风温度
-    model.set('ep_HR_supply', 0.008)        # 设置初始送风湿度
-    model.set('ep_m_supply', 0.3)           # 设置初始送风量
-    # 计算空调开关值：根据获取的室内温湿度初始值
-    T_ini = model.get('T')                  # 设置室内初始温度为EnergyPlus里面设置的Tin
-    RH_ini = model.get('HR')                # 设置室内初始湿度为EnergyPlus里面设置的RH
-    HR_ini = model.get('HR')                # 设置室内初始含湿量为EnergyPlus里面设置的HR
-    if (T_ini < 23):                        # 开启空调阈值23℃
-        Ava = 0
-    if (T_ini >= 23):
-        Ava = 1
-    Switch[i] = Ava                         # Switch为开关情况数组，Ava为此时间步长的空调开关情况
-    # 向EnergyPlus传输开关值
-    model.set('ep_switch', Ava)             # 设置EnergyPlus里空调开关的开闭为Ava
-    # 运行一个时间步长
-    model.do_step(current_t=sim_start, step_size=step_time, new_step='True')
-
-    # %%
-    '''
-    5 运行一个时间步长后从模型中获取数据
-    '''
-    # 从模型中获取数据
-    # 获取室内温湿度
-    ep_T[i] = model.get('T')                # 获取室内温度
-    ep_RH[i] = model.get('RH')              # 获取室内含湿量 Humidity Ratio(用于计算送风含湿量)
-    ep_HR[i] = model.get('HR')              # 获取室内含湿量 Humidity Ratio(用于计算送风含湿量)
-    # 获取室外温度（压缩机功率需要用到）
-    ep_T_out[i] = model.get('T_out')        # 获取室外温度
-    ep_HR_out[i] = model.get('HR_out')      # 获取室外含湿量
-    ep_Solar_direct[i] = model.get('Solar_direct')      # 获取室外含湿量
-
-    # 获取验证数据
-    ep_Qs_zone[i] = model.get('Qs_1')
-    ep_Ql_zone[i] = model.get('Ql_1')
-    ep_Qt_zone[i] = model.get('Qt_1')
-    ep_Qs_supplyair[i] = model.get('Qs')
-    ep_Ql_supplyair[i] = model.get('Ql')
-    ep_Qt_supplyair[i] = model.get('Qt')
-    # %%
-    '''
-    6 利用运行一个时间步长的参数来计算下一时刻送风参数 （这里用到控制算法）
-    '''
-    # 计算控制算法和空调模型所需参数
-    Tw[i] = t_HR_ts(ep_T[i], ep_HR[i] / 100)                # 计算湿球温度
-    T_c[i] = ep_T[i] - T_ini                                # 计算温度变化率
-    RH_c[i] = ep_RH[i] - RH_ini                             # 计算相对湿度变化率
-    HR_c[i] = ep_HR[i] - HR_ini                             # 计算含湿量变化率
-    PMV[i] = get_PMV(ep_T[i],ep_RH[i])                      # 计算PMV
-    PMV_c = PMV[i]                                          # 计算PMV变化率，设置PMV_ini = 0
-    Elec_params = get_electricity_price(t)                  # 调用函数获取目前电价信息
-    Elec_price = Elec_params[0]                             
-    Elec_price1 = Elec_params[1]              
-    t = Elec_params[2]
-    t1 = Elec_params[3]
-    C_ini = 55                                              # 初始压缩机频率55
-    F_ini = 625                                             # 初始风机转速625
-    # 调用控制算法及空调模型(需要获取很多数据)
-    speed[i] = control_RL(ep_T_out[i], ep_HR_out[i], ep_Solar_direct[i], T_out_ini, ep_T[i],ep_HR[i], PMV[i], T_c[i], HR_c[i], PMV_c[i], C_ini, F_ini, Elec_price, Elec_price1, t, t1)       # 可能需要float，[i,0]是因为要维度相同
-    cooling_load[i] = cond(float(ep_T[i]), float(Tw[i]), speed[i, 0], speed[i, 1] / 1250 * 100)
-    # 调用函数计算出送风数据
-    supply_params = supply(ep_T[i], ep_HR[i], cooling_load[i])
-    to_T_supply[i] = supply_params[0]
-    to_HR_supply[i] = supply_params[1]
-    to_m_supply[i] = supply_params[2]                # 风量固定0.3kg/s
-    # 所有送风参数计算完后再加时间步长
-    sim_start += step_time                           # sim_start这个参数必须要变化，因为do_step进行模拟需要这个参数每次变化一个step_time
-    i += 1
-    # %%
-    '''
-    7 计算后续时刻
-    '''
-    # 计算T0之后
-
+    ep_T[i] = model.get('T')  # 设置室内初始温度为EnergyPlus里面设置的Tin
+    ep_HR[i] = model.get('HR')  # 设置室内初始湿度为EnergyPlus里面设置的RH
+    ep_RH[i] = model.get('HR')
+    T_ini = 25
+    RH_ini = 50
+    HR_ini = 0.00988
+    C_ini = 55
+    F_ini = 625
     while sim_start < sim_stop:
-        # 上一时刻计算的送风参数输入
-        model.set('ep_HR_supply', to_HR_supply[i-1])
-        model.set('ep_m_supply', to_m_supply[i-1])
-        model.set('ep_T_supply', to_T_supply[i-1])
-        # 根据上一时刻室内温度判断是否开空调
-        if (ep_T[i-1] < 23):
-            Ava = 0
-        if (ep_T[i-1] >= 23):
-            Ava = 1
-        # 向EnergyPlus中传输空调开关信号
-        Switch[i] = Ava
-        model.set('ep_switch', Ava)
-        # 继续进行模拟
+        if i == 0 :
+            # 向EnergyPlus传输初始送风温湿度、质量流量
+            model.set('ep_T_supply', 18.55)         # 设置初始送风温度
+            model.set('ep_HR_supply', 0.008)        # 设置初始送风湿度
+            model.set('ep_m_supply', 0.3)           # 设置初始送风量
+            # 计算空调开关值：根据获取的室内温湿度初始值
+                            # 设置室内初始含湿量为EnergyPlus里面设置的HR
+            if (T_ini < 23):                        # 开启空调阈值23℃
+                Ava = 0
+            if (T_ini >= 23):
+                Ava = 1
+        else:
+            model.set('ep_HR_supply', to_HR_supply[i - 1])
+            model.set('ep_m_supply', to_m_supply[i - 1])
+            model.set('ep_T_supply', to_T_supply[i - 1])
+            if (ep_T[i - 1] < 23):  # 开启空调阈值23℃
+                Ava = 0
+            if (ep_T[i - 1] >= 23):
+                Ava = 1
+        Switch[i] = Ava                         # Switch为开关情况数组，Ava为此时间步长的空调开关情况
+        # 向EnergyPlus传输开关值
+        model.set('ep_switch', Ava)             # 设置EnergyPlus里空调开关的开闭为Ava
+        # 运行一个时间步长
         model.do_step(current_t=sim_start, step_size=step_time, new_step='True')
 
-        # 从EnergyPlus获取数据
+        # %%
+        '''
+        5 运行一个时间步长后从模型中获取数据
+        '''
+        # 从模型中获取数据
+        # 获取室内温湿度
         ep_T[i] = model.get('T')                # 获取室内温度
-        ep_RH[i] = model.get('RH')              # 获取室内相对湿度
-        ep_HR[i] = model.get('HR')              # 获取室内含湿量
+        ep_RH[i] = model.get('RH')              # 获取室内含湿量 Humidity Ratio(用于计算送风含湿量)
+        ep_HR[i] = model.get('HR')              # 获取室内含湿量 Humidity Ratio(用于计算送风含湿量)
+        # 获取室外温度（压缩机功率需要用到）
         ep_T_out[i] = model.get('T_out')        # 获取室外温度
-        ep_HR_out[i] = model.get('HR_out')      # 获取室外湿度
-        ep_m_out[i] = model.get('m_out')        # 获取室外风量
-        ep_Solar_direct[i] = model.get('m_out') # 获取室外太阳辐射
+        ep_HR_out[i] = model.get('HR_out')      # 获取室外含湿量
+        ep_Solar_direct[i] = model.get('Solar_direct')      # 获取室外太阳直射
 
         # 获取验证数据
         ep_Qs_zone[i] = model.get('Qs_1')
@@ -222,37 +172,45 @@ def get_data():
         ep_Qs_supplyair[i] = model.get('Qs')
         ep_Ql_supplyair[i] = model.get('Ql')
         ep_Qt_supplyair[i] = model.get('Qt')
+        # %%
+        '''
+        6 利用运行一个时间步长的参数来计算下一时刻送风参数 （这里用到控制算法）
+        '''
+        # 计算控制算法和空调模型所需参数
+        Tw[i] = t_HR_ts(ep_T[i], ep_HR[i] / 100)                # 计算湿球温度
+        PMV[i] = get_PMV(ep_T[i],ep_RH[i])                      # 计算PMV
+        Elec_params = get_electricity_price(step[i])                  # 调用函数获取目前电价信息
+        Elec_price[i] = Elec_params[0]
+        Elec_price1[i] = Elec_params[1]
+        t[i] = Elec_params[2]
+        t1[i] = Elec_params[3]
+        if i == 0 :
+            T_c[i] = ep_T[i] - T_ini                                # 计算温度变化率
+            RH_c[i] = ep_RH[i] - RH_ini                             # 计算相对湿度变化率
+            HR_c[i] = ep_HR[i] - HR_ini                             # 计算含湿量变化率
+            PMV_c = PMV[i]                                          # 计算PMV变化率，设置PMV_ini = 0
+            speed[i] = control_RL(ep_T_out[i], ep_HR_out[i], ep_Solar_direct[i], T_out_ini, ep_T[i], ep_HR[i], PMV[i],
+                                  T_c[i], HR_c[i], PMV_c[i], C_ini, F_ini, Elec_price, Elec_price1, t, t1)
+        else:
+            T_c[i] = ep_T[i] - ep_T[i-1]        # 计算温度变化率
+            RH_c[i] = ep_RH[i] - ep_RH[i-1]     # 计算相对湿度变化率
+            HR_c[i] = ep_HR[i] - ep_HR[i-1]     # 计算含湿量变化率
+            PMV_c = PMV[i] - PMV[i-1]           # 计算PMV变化率
 
-        # 根据获取数据进行计算
-        PMV[i] = get_PMV(ep_T[i], ep_RH[i])  # 计算PMV
-        T_c[i] = ep_T[i] - ep_T[i-1]                # 计算温度变化率
-        RH_c[i] = ep_RH[i] - ep_RH[i-1]             # 计算温度变化率
-        HR_c[i] = ep_HR[i] - ep_HR[i-1]             # 计算含湿量变化率
-        speed[i] = control_RL(float(ep_T[i-1, 0]))     # 根据算法获取压缩机风机转速
-        Tw[i] = t_HR_ts(ep_T[i], ep_HR[i] / 100)        # 计算湿球温度
-        PMV_c = PMV[i]  # 计算PMV变化率，设置PMV_ini = 0
-        Elec_params = get_electricity_price(t)  # 调用函数获取目前电价信息
-        Elec_price = Elec_params[0]
-        Elec_price1 = Elec_params[1]
-        t = Elec_params[2]
-        t1 = Elec_params[3]
-        
-        speed[i] = control_RL(ep_T_out[i], ep_HR_out[i], ep_Solar_direct[i], T_out_ini, ep_T[i], ep_HR[i], PMV[i],
-                              T_c[i], HR_c[i], PMV_c[i], C_ini, F_ini, Elec_price, Elec_price1, t,
-                              t1)  # 可能需要float，[i,0]是因为要维度相同
-        y1 = 0.766956 + 0.0107756 * Tw[i] - 0.0000414703 * Tw[i] ** 2 + 0.00134961 * ep_T_out[i] - 0.000261144 * ep_T_out[
-            i] ** 2 + 0.000457488 * Tw[i] * ep_T_out[i]
-        cooling_load[i] = cond(float(ep_T[i]), float(Tw[i]), speed[i, 0], speed[i, 1] / 1250 * 100)*y1  # 计算冷量
-
+            # 调用控制算法及空调模型(需要获取很多数据)
+            speed[i] = control_RL(ep_T_out[i], ep_HR_out[i], ep_Solar_direct[i], T_out_ini, ep_T[i],ep_HR[i], PMV[i], T_c[i], HR_c[i], PMV_c[i], speed[i-1,0], speed[i-1,1], Elec_price, Elec_price1, t, t1)       # 可能需要float，[i,0]是因为要维度相同
+        cooling_load[i] = cond(float(ep_T[i]), float(Tw[i]), speed[i, 0], speed[i, 1] / 1250 * 100)
         # 调用函数计算出送风数据
+        y1 = 0.766956 + 0.0107756 * Tw[i] - 0.0000414703 * Tw[i] ** 2 + 0.00134961 * ep_T_out[i] - 0.000261144 * \
+             ep_T_out[
+                 i] ** 2 + 0.000457488 * Tw[i] * ep_T_out[i]
         supply_params = supply(ep_T[i], ep_HR[i], cooling_load[i])
         to_T_supply[i] = supply_params[0]
         to_HR_supply[i] = supply_params[1]
-        to_m_supply[i] = supply_params[2]  # 风量固定0.3kg/s
-
-        # 索引参数及sim_star变化
+        to_m_supply[i] = supply_params[2]                # 风量固定0.3kg/s
+        # 所有送风参数计算完后再加时间步长
+        sim_start += step_time                           # sim_start这个参数必须要变化，因为do_step进行模拟需要这个参数每次变化一个step_time
         i += 1
-        sim_start += step_time # 模拟时间增加timestep(因为do_step需要sim_start变化)
 
     # 计算其他便于输出
     return ep_T, ep_HR, T_c, HR_c, 
